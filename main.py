@@ -3,7 +3,6 @@ import datetime
 import time
 from typing import Dict, List, Optional
 import pandas as pd
-from IPython.display import display
 
 
 class GitHubContributorAnalyzer:
@@ -220,8 +219,6 @@ class GitHubContributorAnalyzer:
         return pd.DataFrame(flattened_data)
 
 
-# NOTEBOOK CODE - RUN THIS
-
 # Set your GitHub repository details here
 REPO_OWNER = "elizaOS"  # Change to your target repo owner/organization
 REPO_NAME = "eliza"   # Change to your target repo name
@@ -250,8 +247,8 @@ for i, contributor in enumerate(contributors):
     print()
 
 # Display the DataFrame with the most active contributors
-print("\nDataFrame of all contributors:")
-display(df_contributors)
+# print("\nDataFrame of all contributors:")
+# display(df_contributors)
 
 # Save to CSV (optional)
 df_contributors.to_csv(
