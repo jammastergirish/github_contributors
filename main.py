@@ -3,6 +3,12 @@ import datetime
 import time
 from typing import Dict, List, Optional
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+REPO_URL = "https://github.com/tensorflow/tensorflow/tree/master/tensorflow/python"
 
 
 class GitHubContributorAnalyzer:
@@ -219,11 +225,49 @@ class GitHubContributorAnalyzer:
         return pd.DataFrame(flattened_data)
 
 
-# Set your GitHub repository details here
-REPO_OWNER = "elizaOS"  # Change to your target repo owner/organization
-REPO_NAME = "eliza"   # Change to your target repo name
+def extract_repo_info(repo_url):
+    """
+    Extract repository owner and name from a GitHub URL.
+    Works with various GitHub URL formats including those with deeper paths.
+
+    Args:
+        repo_url: A GitHub repository URL
+
+    Returns:
+        tuple: (repo_owner, repo_name)
+    """
+    # Clean the URL
+    url = repo_url.strip()
+
+    # Remove trailing slash if present
+    if url.endswith('/'):
+        url = url[:-1]
+
+    # Handle both HTTPS and SSH URL formats
+    if url.startswith('https://'):
+        # Handle HTTPS URLs
+        parts = url.replace('https://github.com/', '').split('/')
+    elif url.startswith('git@github.com:'):
+        # Handle SSH URLs
+        parts = url.replace('git@github.com:', '').split('/')
+    else:
+        # Handle direct owner/repo format
+        parts = url.split('/')
+
+    # The first two parts should be owner and repo name
+    if len(parts) >= 2:
+        owner = parts[0]
+        name = parts[1]
+        return owner, name
+    else:
+        raise ValueError(
+            f"Could not extract owner and repo name from URL: {repo_url}")
+
+
+REPO_OWNER, REPO_NAME = extract_repo_info(REPO_URL)
+
 # Optional: Add your GitHub token here for higher rate limits
-GITHUB_TOKEN = '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'
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 # Create analyzer and run analysis
 analyzer = GitHubContributorAnalyzer(GITHUB_TOKEN)
