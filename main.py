@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-REPO_URL = "https://github.com/tensorflow/tensorflow/tree/master/tensorflow/python"
+REPO_URL = "https://github.com/openai/whisper"
 
 
 class GitHubContributorAnalyzer:
